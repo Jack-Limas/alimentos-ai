@@ -8,6 +8,9 @@ async function buildAppWithFailingRoutes(nodeEnv: 'test' | 'production' = 'test'
   app.get('/ai-timeout', () => {
     throw AppError.ai('TIMEOUT', 'Gemini did not answer in time');
   });
+  app.get('/quota', () => {
+    throw AppError.ai('QUOTA_EXCEEDED', 'Gemini quota exceeded', 23);
+  });
   app.get('/zod-error', () => {
     z.object({ locale: z.enum(['es', 'en']) }).parse({ locale: 'fr' });
   });
@@ -26,6 +29,24 @@ describe('error handler', () => {
     expect(res.statusCode).toBe(504);
     expect(res.json()).toEqual({
       error: { code: 'TIMEOUT', category: 'TIMEOUT', message: 'Gemini did not answer in time' },
+    });
+    await app.close();
+  });
+
+  it('sends Retry-After and retryAfterSec for a quota error', async () => {
+    const app = await buildAppWithFailingRoutes();
+
+    const res = await app.inject({ method: 'GET', url: '/quota' });
+
+    expect(res.statusCode).toBe(429);
+    expect(res.headers['retry-after']).toBe('23');
+    expect(res.json()).toEqual({
+      error: {
+        code: 'QUOTA_EXCEEDED',
+        category: 'QUOTA_EXCEEDED',
+        message: 'Gemini quota exceeded',
+        retryAfterSec: 23,
+      },
     });
     await app.close();
   });
