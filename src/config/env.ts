@@ -9,10 +9,12 @@ export const envSchema = z.object({
   // Shared secret with alimentos-backend, sent as X-Internal-Key.
   AI_INTERNAL_KEY: z.string().min(32, 'must be at least 32 characters long'),
 
-  // Gemini (optional until phase 3). Only this service knows the API key.
+  // Gemini. Only this service knows the API key; without it the AI endpoints answer
+  // INVALID_API_KEY ("not configured") instead of failing at startup.
   GEMINI_API_KEY: optionalString,
   GEMINI_MODEL: optionalString,
-  AI_UPSTREAM_TIMEOUT_MS: z.coerce.number().int().positive().optional(),
+  // Below the backend's 15 s timeout, so the backend always gets our answer (or our TIMEOUT).
+  AI_UPSTREAM_TIMEOUT_MS: z.coerce.number().int().min(1000).max(14_000).default(12_000),
 });
 
 export type Env = z.infer<typeof envSchema>;

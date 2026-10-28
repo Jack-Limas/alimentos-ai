@@ -25,6 +25,16 @@ describe('parseEnv', () => {
     );
   });
 
+  it('defaults AI_UPSTREAM_TIMEOUT_MS to 12000 and keeps it under the backend 15 s', () => {
+    expect(parseEnv(validEnv).AI_UPSTREAM_TIMEOUT_MS).toBe(12_000);
+    expect(parseEnv({ ...validEnv, AI_UPSTREAM_TIMEOUT_MS: '8000' }).AI_UPSTREAM_TIMEOUT_MS).toBe(
+      8000,
+    );
+    expect(() => parseEnv({ ...validEnv, AI_UPSTREAM_TIMEOUT_MS: '15000' })).toThrow(
+      /AI_UPSTREAM_TIMEOUT_MS/,
+    );
+  });
+
   it('treats empty values as unset', () => {
     const env = parseEnv({ ...validEnv, PORT: '', GEMINI_API_KEY: '', GEMINI_MODEL: ' ' });
 
