@@ -22,6 +22,18 @@ Conventions for anyone (human or AI assistant) working in this repository.
   receives already filtered data, validates it with Zod and returns structured JSON (validated with
   Zod as well).
 
+## AI rules
+
+- The model only explains data the backend computed: it never decides quantities and every figure
+  it writes must exist in the input (`src/shared/text/number-guard.ts`).
+- Prompts live in `src/prompts/` as versioned consts; change the version when the wording changes.
+  Input data goes in the `DATA (JSON)` block, never in the system prompt (prompt injection).
+- Model output is plain text: `toPlainText` strips Markdown and emojis; the frontend formats it.
+- Post-validate everything (codes, products, enums) and count what is dropped in
+  `meta.discardedItems`. Errors map to the five categories with fixed messages; Google's raw
+  message is never returned or logged.
+- Tests never call Google: inject a fake `LlmClient` or a scripted transport.
+
 ## Code
 
 - Code, identifiers, comments, commit messages and log messages in **English**. User-facing docs
@@ -43,7 +55,7 @@ Conventions for anyone (human or AI assistant) working in this repository.
 
 - Exact versions only (no `^` or `~`); `.npmrc` enforces `save-exact` and `engine-strict`. Use
   npm and commit `package-lock.json`.
-- Do not add dependencies outside the current phase's plan (the Gemini SDK enters in phase 3).
+- Do not add dependencies outside the current phase's plan.
 
 ## Secrets
 
