@@ -16,7 +16,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "smoke:gemini": "tsx scripts/smoke-gemini.ts"
   },
   "dependencies": {
     "@fastify/helmet": "13.2.0",
