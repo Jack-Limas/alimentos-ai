@@ -22,6 +22,6 @@ const TASK = {
 };
 
 export const RESCUE_PLAN_PROMPT: VersionedPrompt = Object.freeze({
-  version: 'rescue-plan@1',
+  version: 'rescue-plan@2',
   system: (locale: Locale) => `${SHARED_RULES[locale]}\n\n${TASK[locale]}`,
 });

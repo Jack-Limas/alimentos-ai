@@ -16,6 +16,6 @@ const TASK = {
 };
 
 export const BRIEFING_PROMPT: VersionedPrompt = Object.freeze({
-  version: 'briefing@1',
+  version: 'briefing@2',
   system: (locale: Locale) => `${SHARED_RULES[locale]}\n\n${TASK[locale]}`,
 });

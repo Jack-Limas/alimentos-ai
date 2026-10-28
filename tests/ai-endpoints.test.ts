@@ -109,7 +109,7 @@ describe('POST /v1/proposal-explanation', () => {
       highlights: ['El PED-000003 recibe 8 de 12,5.', 'Revisa el PED-000002'],
       meta: {
         model: 'gemini-test-flash',
-        promptVersion: 'proposal-explanation@1',
+        promptVersion: 'proposal-explanation@2',
         latencyMs: 7,
         inputTokens: 321,
         outputTokens: 54,
