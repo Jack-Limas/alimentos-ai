@@ -5,9 +5,12 @@ const unauthorized = {
   error: { code: 'UNAUTHORIZED', message: 'Missing or invalid internal key' },
 };
 
-async function ping(headers: Record<string, string> = {}, url = '/v1/ping') {
+const briefing = { locale: 'es', role: 'OPERATOR', alerts: [], pendingOrders: [], kpis: {} };
+
+/** Calls a protected endpoint (POST /v1/briefing with a valid body) with the given headers. */
+async function ping(headers: Record<string, string> = {}, url = '/v1/briefing') {
   const app = await buildTestApp();
-  const res = await app.inject({ method: 'GET', url, headers });
+  const res = await app.inject({ method: 'POST', url, headers, payload: briefing });
   await app.close();
   return res;
 }
@@ -40,7 +43,7 @@ describe('X-Internal-Key protection on /v1', () => {
     const res = await ping({ 'x-internal-key': TEST_INTERNAL_KEY });
 
     expect(res.statusCode).toBe(200);
-    expect(res.json()).toEqual({ pong: true });
+    expect(res.json<{ summary: string }>().summary).toBe('Resumen de prueba.');
   });
 
   it('protects unknown routes under /v1 too', async () => {

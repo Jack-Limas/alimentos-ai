@@ -4,11 +4,32 @@ import { readAppInfo, type AppInfo } from './config/app-info.js';
 import type { Env } from './config/env.js';
 import { buildLoggerOptions } from './config/logger.js';
 import {
+  createGoogleTransport,
+  createJsonLlmClient,
+  LlmError,
+  type LlmClient,
+  type LlmTransport,
+} from './gemini/index.js';
+import {
+  briefingRoutes,
+  createBriefingController,
+  createBriefingService,
+} from './modules/briefing/index.js';
+import {
   createHealthController,
   createHealthService,
   healthRoutes,
 } from './modules/health/index.js';
-import { pingRoutes } from './modules/ping/index.js';
+import {
+  createProposalExplanationController,
+  createProposalExplanationService,
+  proposalExplanationRoutes,
+} from './modules/proposal-explanation/index.js';
+import {
+  createRescuePlanController,
+  createRescuePlanService,
+  rescuePlanRoutes,
+} from './modules/rescue-plan/index.js';
 import errorHandler from './plugins/error-handler.js';
 import internalAuth from './plugins/internal-auth.js';
 import security from './plugins/security.js';
@@ -16,9 +37,31 @@ import security from './plugins/security.js';
 export const PROTECTED_PREFIX = '/v1';
 
 export interface AppDeps {
-  env: Pick<Env, 'NODE_ENV' | 'AI_INTERNAL_KEY' | 'GEMINI_API_KEY' | 'GEMINI_MODEL'>;
+  env: Pick<
+    Env,
+    'NODE_ENV' | 'AI_INTERNAL_KEY' | 'GEMINI_API_KEY' | 'GEMINI_MODEL' | 'AI_UPSTREAM_TIMEOUT_MS'
+  >;
+  /** Defaults to Gemini through @google/genai. Tests inject a fake. */
+  llm?: LlmClient;
   appInfo?: AppInfo;
   logger?: NonNullable<FastifyServerOptions['logger']>;
+}
+
+/** Used when GEMINI_API_KEY is missing: never reached, the client refuses first. */
+const unconfiguredTransport: LlmTransport = () =>
+  Promise.reject(
+    new LlmError('INVALID_API_KEY', false, undefined, 'GEMINI_API_KEY is not configured'),
+  );
+
+function defaultLlm(env: AppDeps['env']): LlmClient {
+  return createJsonLlmClient({
+    transport: env.GEMINI_API_KEY
+      ? createGoogleTransport(env.GEMINI_API_KEY)
+      : unconfiguredTransport,
+    model: env.GEMINI_MODEL ?? null,
+    apiKeyConfigured: env.GEMINI_API_KEY !== undefined,
+    timeoutMs: env.AI_UPSTREAM_TIMEOUT_MS,
+  });
 }
 
 export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
@@ -48,7 +91,19 @@ export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
   );
 
   await app.register(healthRoutes, { controller: healthController });
-  await app.register(pingRoutes, { prefix: PROTECTED_PREFIX });
+  const llm = deps.llm ?? defaultLlm(env);
+  await app.register(proposalExplanationRoutes, {
+    prefix: PROTECTED_PREFIX,
+    controller: createProposalExplanationController(createProposalExplanationService(llm)),
+  });
+  await app.register(rescuePlanRoutes, {
+    prefix: PROTECTED_PREFIX,
+    controller: createRescuePlanController(createRescuePlanService(llm)),
+  });
+  await app.register(briefingRoutes, {
+    prefix: PROTECTED_PREFIX,
+    controller: createBriefingController(createBriefingService(llm)),
+  });
 
   return app;
 }
