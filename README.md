@@ -63,7 +63,7 @@ priority, dueDate, customerType? }], kpis }`.
 - **El backend arma el contexto; este servicio nunca decide cantidades ni inventa cifras.** Explica
   datos ya calculados.
 - `src/gemini/`: interfaz `LlmClient` y su implementación con `@google/genai`: salida JSON con
-  esquema (`responseJsonSchema`), `temperature` 0.2, sin presupuesto de "thinking" y un solo
+  esquema (`responseJsonSchema`), `temperature` 0.2, `thinkingLevel` MINIMAL (Gemini 3.x rechaza `thinkingBudget`) y un solo
   timeout (`AI_UPSTREAM_TIMEOUT_MS`, 12 s por defecto, por debajo de los 15 s del backend) que
   cubre también el reintento.
 - **Un reintento interno** ante 5xx, error de red o JSON inválido / fuera de esquema. Después →
