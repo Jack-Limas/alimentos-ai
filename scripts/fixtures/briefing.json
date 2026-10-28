@@ -1,0 +1,63 @@
+{
+  "locale": "es",
+  "role": "ADMIN",
+  "alerts": [
+    {
+      "type": "LOW_STOCK",
+      "severity": "CRITICAL",
+      "code": "OUT_OF_STOCK",
+      "params": { "name": "Tilapia fresca", "minStock": 20 }
+    },
+    {
+      "type": "WASTE_RISK",
+      "severity": "CRITICAL",
+      "code": "COVERAGE_EXCEEDS_EXPIRY",
+      "params": { "name": "Queso campesino", "coverageDays": 29.5, "daysToExpiry": 13 }
+    },
+    {
+      "type": "EXPIRING_SOON",
+      "severity": "WARNING",
+      "code": "EXPIRES_IN_DAYS",
+      "params": { "name": "Leche entera en bolsa", "days": 3, "expiryDate": "2026-10-31" }
+    },
+    {
+      "type": "SHORTAGE_RISK",
+      "severity": "WARNING",
+      "code": "PENDING_DEMAND_EXCEEDS_STOCK",
+      "params": { "name": "Lenteja", "demand": 75, "available": 37.1 }
+    },
+    {
+      "type": "ORDER_DUE_SOON",
+      "severity": "CRITICAL",
+      "code": "ORDER_OVERDUE",
+      "params": { "orderCode": "PED-000001", "daysOverdue": 2 }
+    }
+  ],
+  "pendingOrders": [
+    {
+      "orderCode": "PED-000021",
+      "priority": "URGENT",
+      "dueDate": "2026-10-28",
+      "customerType": "HOSPITAL"
+    },
+    {
+      "orderCode": "PED-000001",
+      "priority": "HIGH",
+      "dueDate": "2026-10-26",
+      "customerType": "SUPERMARKET"
+    },
+    {
+      "orderCode": "PED-000033",
+      "priority": "URGENT",
+      "dueDate": "2026-10-29",
+      "customerType": "SCHOOL"
+    }
+  ],
+  "kpis": {
+    "totalProducts": 56,
+    "lowStock": 11,
+    "outOfStock": 3,
+    "expiringSoon": 11,
+    "wasteRiskHigh": 4
+  }
+}

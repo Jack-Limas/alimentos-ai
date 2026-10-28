@@ -1,0 +1,38 @@
+{
+  "locale": "es",
+  "products": [
+    {
+      "name": "Queso campesino",
+      "category": "DAIRY",
+      "qty": 53.7,
+      "unit": "KG",
+      "daysToExpiry": 13,
+      "avgDailyOut": 1.82
+    },
+    {
+      "name": "Kumis",
+      "category": "DAIRY",
+      "qty": 39.7,
+      "unit": "L",
+      "daysToExpiry": 6,
+      "avgDailyOut": 0
+    },
+    {
+      "name": "Mango tommy",
+      "category": "FRUITS_VEGETABLES",
+      "qty": 41,
+      "unit": "KG",
+      "daysToExpiry": 9,
+      "avgDailyOut": 2.9
+    },
+    {
+      "name": "Jugo de naranja",
+      "category": "BEVERAGES",
+      "qty": 62,
+      "unit": "L",
+      "daysToExpiry": 11,
+      "avgDailyOut": 3.1
+    }
+  ],
+  "customerTypes": ["SUPERMARKET", "RESTAURANT", "SCHOOL", "HOSPITAL", "FOOD_BANK"]
+}

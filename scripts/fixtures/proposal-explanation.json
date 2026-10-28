@@ -1,0 +1,68 @@
+{
+  "locale": "es",
+  "role": "OPERATOR",
+  "strategy": "BALANCED",
+  "lines": [
+    {
+      "orderCode": "PED-000021",
+      "customerType": "HOSPITAL",
+      "product": "Leche entera en bolsa",
+      "requestedQty": 40,
+      "recommendedQty": 40,
+      "score": 95,
+      "reasons": [
+        { "code": "PRIORITY_URGENT", "params": {} },
+        { "code": "DUE_IN_DAYS", "params": { "days": 0 } },
+        { "code": "EXPIRES_IN_DAYS", "params": { "days": 3 } }
+      ]
+    },
+    {
+      "orderCode": "PED-000021",
+      "customerType": "HOSPITAL",
+      "product": "Pechuga de pollo",
+      "requestedQty": 18,
+      "recommendedQty": 12.5,
+      "score": 95,
+      "reasons": [
+        { "code": "PRIORITY_URGENT", "params": {} },
+        { "code": "PARTIAL_STOCK", "params": { "requested": 18, "allocated": 12.5 } }
+      ]
+    },
+    {
+      "orderCode": "PED-000033",
+      "customerType": "SCHOOL",
+      "product": "Arroz blanco",
+      "requestedQty": 60,
+      "recommendedQty": 60,
+      "score": 94.17,
+      "reasons": [
+        { "code": "PRIORITY_URGENT", "params": {} },
+        { "code": "DUE_IN_DAYS", "params": { "days": 1 } }
+      ]
+    },
+    {
+      "orderCode": "PED-000013",
+      "customerType": "RESTAURANT",
+      "product": "Tilapia fresca",
+      "requestedQty": 10,
+      "recommendedQty": 0,
+      "score": 92.5,
+      "reasons": [
+        { "code": "PRIORITY_URGENT", "params": {} },
+        { "code": "NO_STOCK", "params": { "requested": 10 } }
+      ]
+    },
+    {
+      "orderCode": "PED-000001",
+      "customerType": "SUPERMARKET",
+      "product": "Pan tajado",
+      "requestedQty": 30,
+      "recommendedQty": 30,
+      "score": 88.33,
+      "reasons": [
+        { "code": "PRIORITY_HIGH", "params": {} },
+        { "code": "OVERDUE", "params": { "days": 2 } }
+      ]
+    }
+  ]
+}
