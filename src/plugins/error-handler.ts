@@ -9,7 +9,7 @@ export interface ErrorHandlerOptions {
 }
 
 interface ErrorBody {
-  error: { code: ErrorCode; category?: AiErrorCategory; message: string };
+  error: { code: ErrorCode; category?: AiErrorCategory; message: string; retryAfterSec?: number };
 }
 
 const STATUS_TO_CODE: Partial<Record<number, ErrorCode>> = {
@@ -24,8 +24,13 @@ function send(
   code: ErrorCode,
   message: string,
   category?: AiErrorCategory,
+  retryAfterSec?: number,
 ): FastifyReply {
   const body: ErrorBody = { error: category ? { code, category, message } : { code, message } };
+  if (retryAfterSec !== undefined) {
+    body.error.retryAfterSec = retryAfterSec;
+    void reply.header('Retry-After', String(retryAfterSec));
+  }
   return reply.status(statusCode).send(body);
 }
 
@@ -47,7 +52,14 @@ const errorHandlerPlugin: FastifyPluginCallback<ErrorHandlerOptions> = (app, opt
 
   app.setErrorHandler((error: unknown, request, reply) => {
     if (error instanceof AppError) {
-      return send(reply, error.statusCode, error.code, error.message, error.category);
+      return send(
+        reply,
+        error.statusCode,
+        error.code,
+        error.message,
+        error.category,
+        error.retryAfterSec,
+      );
     }
 
     if (error instanceof ZodError) {
