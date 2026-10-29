@@ -192,3 +192,39 @@ describe('mapUpstreamError', () => {
     expect(parseRetryAfter(message)).toBe(seconds);
   });
 });
+
+describe('attempt trace (diagnostics without content)', () => {
+  it('records finishReason, tokens, JSON and schema per attempt, also when it fails', async () => {
+    let calls = 0;
+    const transport: LlmTransport = () => {
+      calls += 1;
+      return Promise.resolve(
+        calls === 1
+          ? { text: '{"summary":"cortad', finishReason: 'MAX_TOKENS', outputTokens: 2048 }
+          : { text: '{"other":1}', finishReason: 'STOP', outputTokens: 9 },
+      );
+    };
+
+    const error = await client(transport)
+      .generateJson(request)
+      .then(
+        () => null,
+        (e: unknown) => e,
+      );
+
+    expect(error).toBeInstanceOf(LlmError);
+    expect((error as LlmError).trace).toEqual([
+      { finishReason: 'MAX_TOKENS', outputTokens: 2048, json: 'invalid', schema: 'skipped' },
+      { finishReason: 'STOP', outputTokens: 9, json: 'ok', schema: 'invalid' },
+    ]);
+  });
+
+  it('returns the trace with a good answer', async () => {
+    const transport: LlmTransport = () =>
+      Promise.resolve({ text: '{"summary":"ok"}', finishReason: 'STOP', outputTokens: 5 });
+    const result = await client(transport).generateJson(request);
+    expect(result.trace).toEqual([
+      { finishReason: 'STOP', outputTokens: 5, json: 'ok', schema: 'ok' },
+    ]);
+  });
+});

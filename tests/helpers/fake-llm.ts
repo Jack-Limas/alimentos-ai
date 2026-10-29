@@ -30,6 +30,7 @@ export function createFakeLlm(
         const data = request.schema.parse(answer(request));
         return Promise.resolve({
           data,
+          trace: [{ finishReason: 'STOP', outputTokens: 54, json: 'ok', schema: 'ok' }],
           model,
           latencyMs: 7,
           inputTokens: 321,

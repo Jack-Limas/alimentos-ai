@@ -1,4 +1,6 @@
+import type { DiscardStats } from '../shared/text/discard-stats.js';
 import { AppError, type AiErrorCategory } from '../shared/errors/index.js';
+import type { AttemptTrace } from './llm-client.js';
 
 /**
  * Fixed, safe messages per category. The raw text from Google is never sent
@@ -13,6 +15,11 @@ export const SAFE_MESSAGES: Readonly<Record<AiErrorCategory, string>> = Object.f
 });
 
 export class LlmError extends Error {
+  /** Attempts made before failing, without content (set by the JSON client). */
+  trace?: AttemptTrace[];
+  /** Why post-validation dropped what it dropped (set when nothing usable was left). */
+  discards?: DiscardStats;
+
   constructor(
     public readonly category: AiErrorCategory,
     /** True for failures worth one more attempt (5xx, network, invalid JSON). */

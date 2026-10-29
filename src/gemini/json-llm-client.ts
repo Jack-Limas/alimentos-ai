@@ -1,4 +1,5 @@
 import type {
+  AttemptTrace,
   GenerateJsonRequest,
   GenerateJsonResult,
   LlmClient,
@@ -28,11 +29,17 @@ export function renderUserData(userData: unknown): string {
   return `DATA (JSON):\n${JSON.stringify(userData)}`;
 }
 
-function parseJson(text: string | undefined): unknown {
-  if (text === undefined || text.trim() === '') throw new LlmError('UPSTREAM_ERROR', true);
+function parseJson(text: string | undefined, entry: AttemptTrace): unknown {
+  if (text === undefined || text.trim() === '') {
+    entry.json = 'empty';
+    throw new LlmError('UPSTREAM_ERROR', true);
+  }
   try {
-    return JSON.parse(text) as unknown;
+    const value = JSON.parse(text) as unknown;
+    entry.json = 'ok';
+    return value;
   } catch {
+    entry.json = 'invalid';
     throw new LlmError('UPSTREAM_ERROR', true);
   }
 }
@@ -68,9 +75,11 @@ export function createJsonLlmClient({
         : timeout.signal;
       const started = now();
       const userText = renderUserData(request.userData);
+      const trace: AttemptTrace[] = [];
 
       try {
         for (let attempt = 1; ; attempt += 1) {
+          const entry: AttemptTrace = { json: 'empty', schema: 'skipped' };
           try {
             const response = await transport({
               model,
@@ -80,10 +89,15 @@ export function createJsonLlmClient({
               temperature: TEMPERATURE,
               signal,
             });
-            const parsed = request.schema.safeParse(parseJson(response.text));
+            trace.push(entry);
+            if (response.finishReason !== undefined) entry.finishReason = response.finishReason;
+            if (response.outputTokens !== undefined) entry.outputTokens = response.outputTokens;
+            const parsed = request.schema.safeParse(parseJson(response.text, entry));
+            entry.schema = parsed.success ? 'ok' : 'invalid';
             if (!parsed.success) throw new LlmError('UPSTREAM_ERROR', true);
             return {
               data: parsed.data,
+              trace,
               model,
               latencyMs: Math.round(now() - started),
               ...(response.inputTokens === undefined ? {} : { inputTokens: response.inputTokens }),
@@ -98,7 +112,10 @@ export function createJsonLlmClient({
               signal.aborted || isAbortError(error)
                 ? new LlmError('TIMEOUT')
                 : mapUpstreamError(error);
-            if (!mapped.retryable || attempt >= MAX_ATTEMPTS) throw mapped;
+            if (!mapped.retryable || attempt >= MAX_ATTEMPTS) {
+              mapped.trace = trace;
+              throw mapped;
+            }
           }
         }
       } finally {

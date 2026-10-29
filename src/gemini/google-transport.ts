@@ -25,8 +25,10 @@ export function createGoogleTransport(apiKey: string): LlmTransport {
       },
     });
     const usage = response.usageMetadata;
+    const finishReason = response.candidates?.[0]?.finishReason;
     return {
       text: response.text,
+      ...(finishReason === undefined ? {} : { finishReason }),
       ...(usage?.promptTokenCount === undefined ? {} : { inputTokens: usage.promptTokenCount }),
       ...(usage?.candidatesTokenCount === undefined
         ? {}

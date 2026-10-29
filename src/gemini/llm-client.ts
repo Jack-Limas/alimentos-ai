@@ -15,8 +15,21 @@ export interface GenerateJsonRequest<T> {
   signal?: AbortSignal;
 }
 
+/** What one attempt looked like, without any content (for the logs). */
+export interface AttemptTrace {
+  /** Gemini's finishReason (STOP, MAX_TOKENS, SAFETY…), when it sent one. */
+  finishReason?: string;
+  outputTokens?: number;
+  /** Whether the text was JSON at all. */
+  json: 'ok' | 'empty' | 'invalid';
+  /** Whether that JSON matched the output schema (skipped when it was not JSON). */
+  schema: 'ok' | 'invalid' | 'skipped';
+}
+
 export interface GenerateJsonResult<T> {
   data: T;
+  /** One entry per attempt, in order. */
+  trace: AttemptTrace[];
   model: string;
   latencyMs: number;
   inputTokens?: number;
@@ -43,6 +56,7 @@ export interface TransportRequest {
 
 export interface TransportResponse {
   text: string | undefined;
+  finishReason?: string;
   inputTokens?: number;
   outputTokens?: number;
 }
