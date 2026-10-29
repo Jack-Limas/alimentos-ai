@@ -20,8 +20,18 @@ export interface RunLlmOptions<Raw, Out> {
   endpoint: string;
   promptVersion: string;
   request: GenerateJsonRequest<Raw>;
+  /**
+   * Sent once instead of `request` when its answer was cut by the token limit
+   * (finishReason MAX_TOKENS): less data and a shorter answer, never the same
+   * request again and never more tokens.
+   */
+  compactRequest?: GenerateJsonRequest<Raw>;
   /** Post-validation: keeps only what is grounded in the input; counts drops in `stats`. */
-  sanitize: (raw: Raw, stats: DiscardStats) => { result: Out; discarded: number };
+  sanitize: (
+    raw: Raw,
+    stats: DiscardStats,
+    context: { compacted: boolean },
+  ) => { result: Out; discarded: number };
 }
 
 /**
@@ -34,14 +44,39 @@ export async function runLlm<Raw, Out>({
   endpoint,
   promptVersion,
   request,
+  compactRequest,
   sanitize,
 }: RunLlmOptions<Raw, Out>): Promise<Out & { meta: AiMeta }> {
   const discards = emptyDiscardStats();
+  let compacted = false;
+
+  async function generate() {
+    try {
+      return await llm.generateJson(request);
+    } catch (error) {
+      const cut = error instanceof LlmError && error.trace?.at(-1)?.finishReason === 'MAX_TOKENS';
+      if (!cut || !compactRequest) throw error;
+      compacted = true;
+      const earlier = error.trace ?? [];
+      try {
+        const answer = await llm.generateJson(compactRequest);
+        return {
+          ...answer,
+          trace: [...earlier, ...answer.trace],
+          attempts: earlier.length + answer.attempts,
+        };
+      } catch (second) {
+        if (second instanceof LlmError) second.trace = [...earlier, ...(second.trace ?? [])];
+        throw second;
+      }
+    }
+  }
+
   try {
-    const answer = await llm.generateJson(request);
+    const answer = await generate();
     let sanitized: { result: Out; discarded: number };
     try {
-      sanitized = sanitize(answer.data, discards);
+      sanitized = sanitize(answer.data, discards, { compacted });
     } catch (error) {
       if (error instanceof LlmError) {
         error.trace = answer.trace;
@@ -60,7 +95,10 @@ export async function runLlm<Raw, Out>({
       discardedItems: discarded,
     };
     // Diagnostics without content: finishReason, tokens, JSON/schema per attempt, drops per rule.
-    log.info({ ai: { endpoint, ...meta, trace: answer.trace, discards } }, 'AI call succeeded');
+    log.info(
+      { ai: { endpoint, ...meta, compacted, trace: answer.trace, discards } },
+      'AI call succeeded',
+    );
     return { ...result, meta };
   } catch (error) {
     if (error instanceof LlmError) {
@@ -71,6 +109,7 @@ export async function runLlm<Raw, Out>({
             model: llm.model,
             promptVersion,
             errorCategory: error.category,
+            compacted,
             ...(error.trace ? { trace: error.trace } : {}),
             ...(error.discards ? { discards: error.discards } : {}),
           },
