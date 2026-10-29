@@ -1,0 +1,2346 @@
+{
+  "locale": "es",
+  "role": "ADMIN",
+  "strategy": "AI_ASSISTED",
+  "totals": {
+    "orders": 35,
+    "lines": 87,
+    "full": 7,
+    "partial": 23,
+    "unserved": 5
+  },
+  "lines": [
+    {
+      "orderCode": "PED-000033",
+      "customerType": "SCHOOL",
+      "product": "Pollo entero",
+      "requestedQty": 25,
+      "recommendedQty": 25,
+      "score": 98.33,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000021",
+      "customerType": "RESTAURANT",
+      "product": "Banano",
+      "requestedQty": 8.7,
+      "recommendedQty": 8.7,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000021",
+      "customerType": "RESTAURANT",
+      "product": "Harina de maíz precocida",
+      "requestedQty": 50,
+      "recommendedQty": 46.9,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 235
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 50,
+            "allocated": 46.9
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000021",
+      "customerType": "RESTAURANT",
+      "product": "Avena en hojuelas",
+      "requestedQty": 6.1,
+      "recommendedQty": 6.1,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 243
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000013",
+      "customerType": "SCHOOL",
+      "product": "Tilapia fresca",
+      "requestedQty": 10,
+      "recommendedQty": 0,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 10
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000013",
+      "customerType": "SCHOOL",
+      "product": "Arequipe",
+      "requestedQty": 0.8,
+      "recommendedQty": 0.8,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 112
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000013",
+      "customerType": "SCHOOL",
+      "product": "Banano",
+      "requestedQty": 19.3,
+      "recommendedQty": 19.3,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000041",
+      "customerType": "SUPERMARKET",
+      "product": "Kumis",
+      "requestedQty": 17.3,
+      "recommendedQty": 17.3,
+      "score": 96.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_URGENT",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 0
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000040",
+      "customerType": "SUPERMARKET",
+      "product": "Café molido",
+      "requestedQty": 14.4,
+      "recommendedQty": 14.4,
+      "score": 89.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 339
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000040",
+      "customerType": "SUPERMARKET",
+      "product": "Limón tahití",
+      "requestedQty": 12.2,
+      "recommendedQty": 12.2,
+      "score": 89.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 17
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000040",
+      "customerType": "SUPERMARKET",
+      "product": "Carne de res molida",
+      "requestedQty": 24.3,
+      "recommendedQty": 11.4,
+      "score": 89.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 24.3,
+            "allocated": 11.4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000037",
+      "customerType": "RESTAURANT",
+      "product": "Mantequilla",
+      "requestedQty": 1.1,
+      "recommendedQty": 1.1,
+      "score": 86.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 38
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000037",
+      "customerType": "RESTAURANT",
+      "product": "Pollo entero",
+      "requestedQty": 25,
+      "recommendedQty": 11.6,
+      "score": 86.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 4
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 25,
+            "allocated": 11.6
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000027",
+      "customerType": "SUPERMARKET",
+      "product": "Bagre fresco",
+      "requestedQty": 4.9,
+      "recommendedQty": 4.3,
+      "score": 74.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 4.9,
+            "allocated": 4.3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000036",
+      "customerType": "SUPERMARKET",
+      "product": "Pechuga de pollo",
+      "requestedQty": 20.9,
+      "recommendedQty": 20.9,
+      "score": 72.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000022",
+      "customerType": "SUPERMARKET",
+      "product": "Papa criolla",
+      "requestedQty": 40,
+      "recommendedQty": 40,
+      "score": 68.33,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 5
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 11
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000039",
+      "customerType": "SUPERMARKET",
+      "product": "Queso doble crema",
+      "requestedQty": 24.1,
+      "recommendedQty": 24.1,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 15
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000039",
+      "customerType": "SUPERMARKET",
+      "product": "Harina de trigo",
+      "requestedQty": 5.9,
+      "recommendedQty": 5.9,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 168
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000011",
+      "customerType": "HOSPITAL",
+      "product": "Pechuga de pollo",
+      "requestedQty": 16.6,
+      "recommendedQty": 16.6,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000011",
+      "customerType": "HOSPITAL",
+      "product": "Tilapia fresca",
+      "requestedQty": 10,
+      "recommendedQty": 0,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 10
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000034",
+      "customerType": "SUPERMARKET",
+      "product": "Arveja seca",
+      "requestedQty": 7,
+      "recommendedQty": 7,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 340
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000034",
+      "customerType": "SUPERMARKET",
+      "product": "Plátano hartón",
+      "requestedQty": 18.7,
+      "recommendedQty": 18.7,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000034",
+      "customerType": "SUPERMARKET",
+      "product": "Costilla de cerdo",
+      "requestedQty": 5.7,
+      "recommendedQty": 5.7,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000034",
+      "customerType": "SUPERMARKET",
+      "product": "Pechuga de pollo",
+      "requestedQty": 12.6,
+      "recommendedQty": 3,
+      "score": 67.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 12.6,
+            "allocated": 3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000025",
+      "customerType": "RESTAURANT",
+      "product": "Tomate chonto",
+      "requestedQty": 12.7,
+      "recommendedQty": 12.7,
+      "score": 64.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000025",
+      "customerType": "RESTAURANT",
+      "product": "Arveja seca",
+      "requestedQty": 9.6,
+      "recommendedQty": 9.6,
+      "score": 64.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 340
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000025",
+      "customerType": "RESTAURANT",
+      "product": "Fríjol cargamanto",
+      "requestedQty": 4.1,
+      "recommendedQty": 4.1,
+      "score": 64.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 361
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000042",
+      "customerType": "RESTAURANT",
+      "product": "Costilla de cerdo",
+      "requestedQty": 25,
+      "recommendedQty": 13.2,
+      "score": 62.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 25,
+            "allocated": 13.2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000042",
+      "customerType": "RESTAURANT",
+      "product": "Yuca",
+      "requestedQty": 25.9,
+      "recommendedQty": 25.9,
+      "score": 62.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000023",
+      "customerType": "HOSPITAL",
+      "product": "Yuca",
+      "requestedQty": 5.4,
+      "recommendedQty": 5.4,
+      "score": 61.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 11
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000023",
+      "customerType": "HOSPITAL",
+      "product": "Leche entera en bolsa",
+      "requestedQty": 67.9,
+      "recommendedQty": 51.7,
+      "score": 61.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 11
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 67.9,
+            "allocated": 51.7
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000017",
+      "customerType": "FOOD_BANK",
+      "product": "Huevos AA (cubeta x30)",
+      "requestedQty": 10,
+      "recommendedQty": 10,
+      "score": 60.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 18
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000017",
+      "customerType": "FOOD_BANK",
+      "product": "Arveja seca",
+      "requestedQty": 4.3,
+      "recommendedQty": 4.3,
+      "score": 60.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 340
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000017",
+      "customerType": "FOOD_BANK",
+      "product": "Papa criolla",
+      "requestedQty": 40,
+      "recommendedQty": 17.2,
+      "score": 60.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 14
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 40,
+            "allocated": 17.2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000024",
+      "customerType": "RESTAURANT",
+      "product": "Tilapia fresca",
+      "requestedQty": 6.7,
+      "recommendedQty": 0,
+      "score": 60,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 6.7
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000024",
+      "customerType": "RESTAURANT",
+      "product": "Plátano hartón",
+      "requestedQty": 21.7,
+      "recommendedQty": 21.7,
+      "score": 60,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000015",
+      "customerType": "SUPERMARKET",
+      "product": "Yuca",
+      "requestedQty": 12.4,
+      "recommendedQty": 12.4,
+      "score": 57.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000015",
+      "customerType": "SUPERMARKET",
+      "product": "Maíz tierno en lata",
+      "requestedQty": 2,
+      "recommendedQty": 2,
+      "score": 57.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 726
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000015",
+      "customerType": "SUPERMARKET",
+      "product": "Bagre fresco",
+      "requestedQty": 4.2,
+      "recommendedQty": 0,
+      "score": 57.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 4.2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000015",
+      "customerType": "SUPERMARKET",
+      "product": "Arepas de maíz (paquete x10)",
+      "requestedQty": 36,
+      "recommendedQty": 24,
+      "score": 57.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 36,
+            "allocated": 24
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000012",
+      "customerType": "RESTAURANT",
+      "product": "Pan tajado",
+      "requestedQty": 22,
+      "recommendedQty": 22,
+      "score": 56.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000012",
+      "customerType": "RESTAURANT",
+      "product": "Arepas de maíz (paquete x10)",
+      "requestedQty": 40,
+      "recommendedQty": 0,
+      "score": 56.67,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 40
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000030",
+      "customerType": "RESTAURANT",
+      "product": "Leche deslactosada UHT",
+      "requestedQty": 6.9,
+      "recommendedQty": 6.9,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 81
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000030",
+      "customerType": "RESTAURANT",
+      "product": "Aguacate hass",
+      "requestedQty": 6.5,
+      "recommendedQty": 0,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 6.5
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000030",
+      "customerType": "RESTAURANT",
+      "product": "Chocolate de mesa",
+      "requestedQty": 2.7,
+      "recommendedQty": 2.7,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 362
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000030",
+      "customerType": "RESTAURANT",
+      "product": "Harina de maíz precocida",
+      "requestedQty": 50,
+      "recommendedQty": 0,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 50
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000019",
+      "customerType": "SCHOOL",
+      "product": "Panela",
+      "requestedQty": 24.1,
+      "recommendedQty": 24.1,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 159
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000019",
+      "customerType": "SCHOOL",
+      "product": "Pollo entero",
+      "requestedQty": 25,
+      "recommendedQty": 0,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 25
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000019",
+      "customerType": "SCHOOL",
+      "product": "Harina de trigo",
+      "requestedQty": 8.4,
+      "recommendedQty": 8.4,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 168
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000019",
+      "customerType": "SCHOOL",
+      "product": "Arveja seca",
+      "requestedQty": 7.3,
+      "recommendedQty": 7.3,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 1
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 340
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000018",
+      "customerType": "FOOD_BANK",
+      "product": "Arveja congelada",
+      "requestedQty": 2.7,
+      "recommendedQty": 2.7,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 9
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 153
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000018",
+      "customerType": "FOOD_BANK",
+      "product": "Plátano hartón",
+      "requestedQty": 58.9,
+      "recommendedQty": 55.1,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 9
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "PARTIAL_STOCK",
+          "params": {
+            "requested": 58.9,
+            "allocated": 55.1
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000018",
+      "customerType": "FOOD_BANK",
+      "product": "Fríjol cargamanto",
+      "requestedQty": 15.2,
+      "recommendedQty": 15.2,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 9
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 361
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000018",
+      "customerType": "FOOD_BANK",
+      "product": "Yogur natural",
+      "requestedQty": 4.1,
+      "recommendedQty": 0,
+      "score": 55,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 9
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 4.1
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000043",
+      "customerType": "RESTAURANT",
+      "product": "Cebolla cabezona",
+      "requestedQty": 6,
+      "recommendedQty": 6,
+      "score": 53.33,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 26
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000043",
+      "customerType": "RESTAURANT",
+      "product": "Harina de maíz precocida",
+      "requestedQty": 13,
+      "recommendedQty": 0,
+      "score": 53.33,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 13
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000043",
+      "customerType": "RESTAURANT",
+      "product": "Maíz tierno en lata",
+      "requestedQty": 22,
+      "recommendedQty": 22,
+      "score": 53.33,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 726
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000009",
+      "customerType": "SCHOOL",
+      "product": "Pulpa de mora",
+      "requestedQty": 12.5,
+      "recommendedQty": 0,
+      "score": 47.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 12.5
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000031",
+      "customerType": "RESTAURANT",
+      "product": "Mango tommy",
+      "requestedQty": 2,
+      "recommendedQty": 2,
+      "score": 45.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 5
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000031",
+      "customerType": "RESTAURANT",
+      "product": "Pollo entero",
+      "requestedQty": 14.6,
+      "recommendedQty": 0,
+      "score": 45.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 14.6
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000031",
+      "customerType": "RESTAURANT",
+      "product": "Avena en hojuelas",
+      "requestedQty": 9.4,
+      "recommendedQty": 9.4,
+      "score": 45.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 243
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000031",
+      "customerType": "RESTAURANT",
+      "product": "Arepas de maíz (paquete x10)",
+      "requestedQty": 40,
+      "recommendedQty": 0,
+      "score": 45.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 40
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000031",
+      "customerType": "RESTAURANT",
+      "product": "Huevos AA (cubeta x30)",
+      "requestedQty": 5,
+      "recommendedQty": 5,
+      "score": 45.83,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 18
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000038",
+      "customerType": "SUPERMARKET",
+      "product": "Arroz blanco",
+      "requestedQty": 17.6,
+      "recommendedQty": 17.6,
+      "score": 45,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 3
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 337
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000010",
+      "customerType": "SUPERMARKET",
+      "product": "Harina de maíz precocida",
+      "requestedQty": 50,
+      "recommendedQty": 0,
+      "score": 45,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 50
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000010",
+      "customerType": "SUPERMARKET",
+      "product": "Azúcar blanca",
+      "requestedQty": 24.3,
+      "recommendedQty": 24.3,
+      "score": 45,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 665
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000010",
+      "customerType": "SUPERMARKET",
+      "product": "Pasta spaghetti",
+      "requestedQty": 7.9,
+      "recommendedQty": 7.9,
+      "score": 45,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 533
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000010",
+      "customerType": "SUPERMARKET",
+      "product": "Galletas de soda (paquete)",
+      "requestedQty": 20,
+      "recommendedQty": 20,
+      "score": 45,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "OVERDUE",
+          "params": {
+            "days": 2
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 121
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000029",
+      "customerType": "HOSPITAL",
+      "product": "Tomate chonto",
+      "requestedQty": 27.7,
+      "recommendedQty": 27.7,
+      "score": 44.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000029",
+      "customerType": "HOSPITAL",
+      "product": "Leche entera en bolsa",
+      "requestedQty": 82.2,
+      "recommendedQty": 0,
+      "score": 44.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 82.2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000029",
+      "customerType": "HOSPITAL",
+      "product": "Mantequilla",
+      "requestedQty": 1.4,
+      "recommendedQty": 1.4,
+      "score": 44.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 40
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000029",
+      "customerType": "HOSPITAL",
+      "product": "Maíz pira",
+      "requestedQty": 1.8,
+      "recommendedQty": 1.8,
+      "score": 44.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 343
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000029",
+      "customerType": "HOSPITAL",
+      "product": "Lenteja",
+      "requestedQty": 6.8,
+      "recommendedQty": 6.8,
+      "score": 44.17,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 8
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 338
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000014",
+      "customerType": "FOOD_BANK",
+      "product": "Papa criolla",
+      "requestedQty": 40,
+      "recommendedQty": 0,
+      "score": 37.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 7
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 40
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000026",
+      "customerType": "HOSPITAL",
+      "product": "Pechuga de pollo",
+      "requestedQty": 6.2,
+      "recommendedQty": 0,
+      "score": 35,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 6.2
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000026",
+      "customerType": "HOSPITAL",
+      "product": "Arequipe",
+      "requestedQty": 1.3,
+      "recommendedQty": 1.3,
+      "score": 35,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 112
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000026",
+      "customerType": "HOSPITAL",
+      "product": "Tilapia fresca",
+      "requestedQty": 10,
+      "recommendedQty": 0,
+      "score": 35,
+      "reasons": [
+        {
+          "code": "PRIORITY_HIGH",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 10
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000028",
+      "customerType": "SCHOOL",
+      "product": "Pulpa de mora",
+      "requestedQty": 12.5,
+      "recommendedQty": 0,
+      "score": 32.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 5
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 12.5
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000016",
+      "customerType": "SUPERMARKET",
+      "product": "Aguacate hass",
+      "requestedQty": 20,
+      "recommendedQty": 0,
+      "score": 30,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 20
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000016",
+      "customerType": "SUPERMARKET",
+      "product": "Café molido",
+      "requestedQty": 3.7,
+      "recommendedQty": 3.7,
+      "score": 30,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 6
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 339
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000035",
+      "customerType": "RESTAURANT",
+      "product": "Arepas de maíz (paquete x10)",
+      "requestedQty": 40,
+      "recommendedQty": 0,
+      "score": 27.5,
+      "reasons": [
+        {
+          "code": "PRIORITY_MEDIUM",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 11
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 40
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000008",
+      "customerType": "SUPERMARKET",
+      "product": "Aguacate hass",
+      "requestedQty": 20,
+      "recommendedQty": 0,
+      "score": 20,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 10
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 20
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000032",
+      "customerType": "SCHOOL",
+      "product": "Leche deslactosada UHT",
+      "requestedQty": 15.1,
+      "recommendedQty": 15.1,
+      "score": 15,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 81
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000032",
+      "customerType": "SCHOOL",
+      "product": "Pulpa de mora",
+      "requestedQty": 12.5,
+      "recommendedQty": 0,
+      "score": 15,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 12.5
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000032",
+      "customerType": "SCHOOL",
+      "product": "Yogur natural",
+      "requestedQty": 7.4,
+      "recommendedQty": 0,
+      "score": 15,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 7.4
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000032",
+      "customerType": "SCHOOL",
+      "product": "Aceite vegetal",
+      "requestedQty": 27.2,
+      "recommendedQty": 27.2,
+      "score": 15,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "EXPIRES_IN_DAYS",
+          "params": {
+            "days": 361
+          }
+        }
+      ]
+    },
+    {
+      "orderCode": "PED-000032",
+      "customerType": "SCHOOL",
+      "product": "Costilla de cerdo",
+      "requestedQty": 5.1,
+      "recommendedQty": 0,
+      "score": 15,
+      "reasons": [
+        {
+          "code": "PRIORITY_LOW",
+          "params": {}
+        },
+        {
+          "code": "DUE_IN_DAYS",
+          "params": {
+            "days": 12
+          }
+        },
+        {
+          "code": "NO_STOCK",
+          "params": {
+            "requested": 5.1
+          }
+        }
+      ]
+    }
+  ]
+}
