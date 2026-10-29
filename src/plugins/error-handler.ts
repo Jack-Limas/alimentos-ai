@@ -16,6 +16,8 @@ const STATUS_TO_CODE: Partial<Record<number, ErrorCode>> = {
   400: 'VALIDATION_ERROR',
   401: 'UNAUTHORIZED',
   404: 'NOT_FOUND',
+  413: 'PAYLOAD_TOO_LARGE',
+  429: 'TOO_MANY_REQUESTS',
 };
 
 function send(
