@@ -24,6 +24,8 @@ export interface AttemptTrace {
   json: 'ok' | 'empty' | 'invalid';
   /** Whether that JSON matched the output schema (skipped when it was not JSON). */
   schema: 'ok' | 'invalid' | 'skipped';
+  /** HTTP status of a Gemini error (e.g. 400), when the call itself failed. */
+  upstreamStatus?: number;
 }
 
 export interface GenerateJsonResult<T> {

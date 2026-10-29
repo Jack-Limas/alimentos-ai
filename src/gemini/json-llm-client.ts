@@ -6,7 +6,7 @@ import type {
   LlmTransport,
 } from './llm-client.js';
 import { LlmError } from './llm-error.js';
-import { isAbortError, mapUpstreamError } from './map-upstream-error.js';
+import { isAbortError, mapUpstreamError, statusOf } from './map-upstream-error.js';
 
 /** Low temperature: the answers explain fixed data, they should not be creative. */
 export const TEMPERATURE = 0.2;
@@ -92,9 +92,20 @@ export function createJsonLlmClient({
             trace.push(entry);
             if (response.finishReason !== undefined) entry.finishReason = response.finishReason;
             if (response.outputTokens !== undefined) entry.outputTokens = response.outputTokens;
-            const parsed = request.schema.safeParse(parseJson(response.text, entry));
+            let json: unknown;
+            try {
+              json = parseJson(response.text, entry);
+            } catch (error) {
+              if (entry.finishReason === 'MAX_TOKENS') throw new LlmError('UPSTREAM_ERROR', false);
+              throw error;
+            }
+            const parsed = request.schema.safeParse(json);
             entry.schema = parsed.success ? 'ok' : 'invalid';
-            if (!parsed.success) throw new LlmError('UPSTREAM_ERROR', true);
+            // A cut answer comes back cut again with the same input: no blind retry here,
+            // the service decides (it sends less, see proposal-explanation).
+            if (!parsed.success) {
+              throw new LlmError('UPSTREAM_ERROR', entry.finishReason !== 'MAX_TOKENS');
+            }
             return {
               data: parsed.data,
               trace,
@@ -107,6 +118,11 @@ export function createJsonLlmClient({
               attempts: attempt,
             };
           } catch (error) {
+            if (!trace.includes(entry)) {
+              // The call itself failed: keep Gemini's status (never its message).
+              const status = statusOf(error);
+              trace.push(status === undefined ? entry : { ...entry, upstreamStatus: status });
+            }
             // A timeout is final: the budget covers every attempt.
             const mapped =
               signal.aborted || isAbortError(error)

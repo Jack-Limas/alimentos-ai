@@ -3,7 +3,7 @@ import { LlmError } from './llm-error.js';
 const QUOTA_MARKERS = /RESOURCE_EXHAUSTED|quota/i;
 const KEY_MARKERS = /API_KEY_INVALID|API key not valid|PERMISSION_DENIED|API_KEY_/i;
 
-function statusOf(error: unknown): number | undefined {
+export function statusOf(error: unknown): number | undefined {
   if (typeof error !== 'object' || error === null || !('status' in error)) return undefined;
   const status = error.status;
   return typeof status === 'number' ? status : undefined;

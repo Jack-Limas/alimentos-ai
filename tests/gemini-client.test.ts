@@ -194,29 +194,59 @@ describe('mapUpstreamError', () => {
 });
 
 describe('attempt trace (diagnostics without content)', () => {
-  it('records finishReason, tokens, JSON and schema per attempt, also when it fails', async () => {
+  const failureOf = (promise: Promise<unknown>) =>
+    promise.then(
+      () => null,
+      (e: unknown) => e as LlmError,
+    );
+
+  it('does not retry an answer cut by MAX_TOKENS with the same input', async () => {
+    let calls = 0;
+    const transport: LlmTransport = () => {
+      calls += 1;
+      return Promise.resolve({
+        text: '{"summary":"cortad',
+        finishReason: 'MAX_TOKENS',
+        outputTokens: 2048,
+      });
+    };
+
+    const error = await failureOf(client(transport).generateJson(request));
+
+    expect(error).toBeInstanceOf(LlmError);
+    expect(error?.trace).toEqual([
+      { finishReason: 'MAX_TOKENS', outputTokens: 2048, json: 'invalid', schema: 'skipped' },
+    ]);
+    expect(calls).toBe(1);
+  });
+
+  it('records JSON and schema per attempt when it retries', async () => {
     let calls = 0;
     const transport: LlmTransport = () => {
       calls += 1;
       return Promise.resolve(
         calls === 1
-          ? { text: '{"summary":"cortad', finishReason: 'MAX_TOKENS', outputTokens: 2048 }
+          ? { text: 'not json', finishReason: 'STOP', outputTokens: 3 }
           : { text: '{"other":1}', finishReason: 'STOP', outputTokens: 9 },
       );
     };
 
-    const error = await client(transport)
-      .generateJson(request)
-      .then(
-        () => null,
-        (e: unknown) => e,
-      );
+    const error = await failureOf(client(transport).generateJson(request));
 
-    expect(error).toBeInstanceOf(LlmError);
-    expect((error as LlmError).trace).toEqual([
-      { finishReason: 'MAX_TOKENS', outputTokens: 2048, json: 'invalid', schema: 'skipped' },
+    expect(error?.trace).toEqual([
+      { finishReason: 'STOP', outputTokens: 3, json: 'invalid', schema: 'skipped' },
       { finishReason: 'STOP', outputTokens: 9, json: 'ok', schema: 'invalid' },
     ]);
+  });
+
+  it('keeps the HTTP status of a Gemini error, never its message', async () => {
+    const { transport } = scripted([googleError(400, 'Request contains an invalid argument')]);
+
+    const error = await failureOf(client(transport).generateJson(request));
+
+    expect(error?.category).toBe('UPSTREAM_ERROR');
+    expect(error?.trace).toEqual([{ json: 'empty', schema: 'skipped', upstreamStatus: 400 }]);
+    expect(JSON.stringify(error?.trace)).not.toContain('invalid argument');
   });
 
   it('returns the trace with a good answer', async () => {
