@@ -42,17 +42,24 @@ out(
   `model: ${env.GEMINI_MODEL ?? '(not set)'} · key configured: ${String(Boolean(env.GEMINI_API_KEY))}`,
 );
 
-for (const endpoint of ['proposal-explanation', 'rescue-plan', 'briefing']) {
+// [fixture, endpoint]: the large one has the production shape (35 orders, 87 lines, totals).
+const cases: [string, string][] = [
+  ['proposal-explanation', 'proposal-explanation'],
+  ['proposal-explanation-large', 'proposal-explanation'],
+  ['rescue-plan', 'rescue-plan'],
+  ['briefing', 'briefing'],
+];
+for (const [name, endpoint] of cases) {
   const res = await app.inject({
     method: 'POST',
     url: `/v1/${endpoint}`,
     headers: { 'x-internal-key': env.AI_INTERNAL_KEY },
-    payload: fixture(endpoint) as Record<string, unknown>,
+    payload: fixture(name) as Record<string, unknown>,
   });
   const body = res.json<
     Record<string, unknown> & { meta?: Meta; error?: Record<string, unknown> }
   >();
-  out(`\n== ${endpoint} → HTTP ${String(res.statusCode)}`);
+  out(`\n== ${name} → HTTP ${String(res.statusCode)}`);
   if (body.error) {
     out(
       `   error: ${String(body.error.category ?? body.error.code)} (${String(body.error.message)})`,
