@@ -65,3 +65,27 @@ describe('number guard', () => {
     ).toEqual({ text: 'Despacha 12,5 kg hoy. Revisa el PED-000123.', removed: 1 });
   });
 });
+
+describe('figures derived from the input', () => {
+  const allowed = collectNumbers({
+    lines: [{ orderCode: 'PED-000033', requestedQty: 12.6, score: 94.17 }],
+    dueDate: '2026-10-29',
+  });
+
+  it('accepts the rounding of a score', () => {
+    expect(isGrounded('PED-000033 suma 94 puntos', allowed)).toBe(true);
+    expect(isGrounded('94,2 puntos', allowed)).toBe(true);
+    expect(isGrounded('94,17 puntos', allowed)).toBe(true);
+  });
+
+  it('accepts the parts of a date of the input', () => {
+    expect(isGrounded('Vence el 29 de octubre de 2026.', allowed)).toBe(true);
+    expect(isGrounded('Vence el 30 de octubre.', allowed)).toBe(false);
+  });
+
+  it('never rounds quantities or accepts invented ones', () => {
+    expect(isGrounded('Entrega 13 kg.', allowed)).toBe(false);
+    expect(isGrounded('Entrega 120 kg.', allowed)).toBe(false);
+    expect(isGrounded('Entrega 12,6 kg.', allowed)).toBe(true);
+  });
+});

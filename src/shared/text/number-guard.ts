@@ -2,7 +2,11 @@
  * "No invented figures": every number the model writes must exist in the
  * input. Numbers are compared by value with 3 decimals, so "12,5", "12.5" and
  * "12.50" are the same figure. Digits inside strings count too ("PED-000123"
- * allows 123, "2026-10-28" allows 2026, 10 and 28).
+ * allows 123, "2026-10-28" allows 2026, 10 and 28, so "28 de octubre" passes).
+ * The only derived figures allowed are the roundings of a `score` (94.17 →
+ * 94 or 94.2): a score is a ranking, rounding it changes no quantity.
+ * Quantities are never rounded (12.6 kg → "13 kg" is still invented). Counts
+ * are allowed only when the input declares them (a `totals` block).
  */
 
 const NUMBER_IN_TEXT = /\d+(?:[.,]\d+)*/g;
@@ -32,7 +36,13 @@ export function collectNumbers(data: unknown, into = new Set<string>()): Set<str
   } else if (Array.isArray(data)) {
     for (const item of data) collectNumbers(item, into);
   } else if (typeof data === 'object' && data !== null) {
-    for (const value of Object.values(data)) collectNumbers(value, into);
+    for (const [field, value] of Object.entries(data)) {
+      if (field === 'score' && typeof value === 'number' && Number.isFinite(value)) {
+        into.add(key(Math.round(value)));
+        into.add(key(Math.round(value * 10) / 10));
+      }
+      collectNumbers(value, into);
+    }
   }
   return into;
 }
