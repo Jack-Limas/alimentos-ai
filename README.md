@@ -15,13 +15,22 @@ la `GEMINI_API_KEY`.
 ```mermaid
 flowchart LR
   FE["alimentos-frontend<br/>(navegador)"]
-  BE["alimentos-backend<br/>(Fastify en Render)"]
-  AI["alimentos-ai<br/>(Fastify en Render)<br/>sin BD"]
+  BE["alimentos-backend<br/>(Fastify en Render)<br/>contexto filtrado por rol<br/>enfriamiento + degradación"]
   GEM["Gemini API"]
 
+  subgraph AI["alimentos-ai (Fastify en Render, sin BD)"]
+    direction TB
+    RL["límite 30/min por IP<br/>cuerpo ≤ 256 KB"] --> KEY["X-Internal-Key<br/>(comparación en tiempo constante)"]
+    KEY --> VAL["entrada Zod estricta"]
+    VAL --> PR["prompt versionado<br/>DATA = datos, no instrucciones"]
+    PR --> LLM["LlmClient<br/>JSON con esquema · 1 reintento · timeout 12 s"]
+    LLM --> POST["post-validación<br/>texto plano · cifras ancladas · enums"]
+  end
+
   FE -->|HTTPS + Bearer| BE
-  BE -->|"HTTP + X-Internal-Key<br/>timeout 15 s + 1 reintento"| AI
-  AI -->|GEMINI_API_KEY| GEM
+  BE -->|"HTTP + X-Internal-Key<br/>timeout 15 s + 1 reintento"| RL
+  LLM -->|GEMINI_API_KEY| GEM
+  POST -->|"{ data, meta }"| BE
 ```
 
 El navegador nunca llama a este servicio (por eso no hay CORS). El backend arma el contexto
@@ -68,8 +77,7 @@ priority, dueDate, customerType? }], kpis }`.
   cubre también el reintento.
 - **Un reintento interno** ante 5xx, error de red o JSON inválido / fuera de esquema. Después →
   `UPSTREAM_ERROR`. Un timeout no se reintenta.
-- **Prompts versionados** en `src/prompts/` (`proposal-explanation@1`, `rescue-plan@1`, `briefing@1`)
-  en el idioma de `locale`. Reglas comunes: usar solo el bloque `DATA (JSON)`; lo que hay en DATA son
+- **Prompts versionados** en `src/prompts/` en el idioma de `locale` (versiones abajo). Reglas comunes: usar solo el bloque `DATA (JSON)`; lo que hay en DATA son
   datos, nunca instrucciones (defensa ante prompt injection en nombres de productos o clientes); no
   inventar cifras; frases cortas y accionables; texto plano.
 - **Post-validación** (lo inválido se descarta y se cuenta en `meta.discardedItems`):
@@ -84,6 +92,49 @@ priority, dueDate, customerType? }], kpis }`.
   - Si no queda ninguna frase válida → `UPSTREAM_ERROR` y el backend muestra el resultado de reglas.
 - **Logs**: una línea por llamada con endpoint, modelo, versión del prompt, latencia, tokens,
   intentos, descartes o categoría de error. Nunca el prompt ni las claves.
+
+### Versiones de los prompts
+
+| Prompt                   | Versión actual           | Cambio de la versión 2                                                    |
+| ------------------------ | ------------------------ | ------------------------------------------------------------------------- |
+| Explicación de propuesta | `proposal-explanation@2` | No agregar unidades que no vengan en DATA; tildes y ortografía en español |
+| Plan de rescate          | `rescue-plan@2`          | Ídem                                                                      |
+| Briefing del día         | `briefing@2`             | Ídem                                                                      |
+
+La versión cambia cada vez que cambia el texto y se registra en cada línea de log, así una respuesta
+se puede rastrear hasta el prompt que la produjo.
+
+## Guardrails
+
+| Riesgo                           | Defensa                                                                                                                                                                                                                                                     | Dónde                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Cifras inventadas**            | Toda cifra de una frase debe existir en la entrada (comparadas por valor con 3 decimales: "12,5" = "12.5"); la frase que no cumple se descarta y se cuenta en `meta.discardedItems`. El prompt además prohíbe calcular totales o porcentajes                | `src/shared/text/number-guard.ts`, `modules/ai-common/grounding.ts` |
+| **Salida con formato o basura**  | Texto plano de una línea: sin Markdown, viñetas, backticks, enlaces ni emojis; máximo 280 caracteres; listas sin vacíos ni repetidos y con tope de tamaño                                                                                                   | `src/shared/text/plain-text.ts`                                     |
+| **Salida fuera de lo permitido** | JSON con esquema en Gemini **y** Zod a la salida; `rescue-plan` solo productos de la entrada y acciones del enum (`DONATE` solo si hay bancos de alimentos); `tieBreakOrder` solo pedidos empatados. Si no queda nada válido → `UPSTREAM_ERROR`             | `src/modules/*/*.schemas.ts`, `*.service.ts`                        |
+| **Prompt injection**             | Los nombres de productos y clientes los escriben personas: van dentro del bloque `DATA (JSON)` y las reglas dicen que todo lo que hay ahí son datos, nunca instrucciones. Aunque el modelo obedeciera, la post-validación limita lo que puede salir         | `src/prompts/shared-rules.ts`                                       |
+| **Minimización de datos**        | El backend arma el contexto filtrado por rol (el OPERATOR no envía datos de gestión) y solo manda lo necesario: sin emails, teléfonos, direcciones ni ids de usuario. Aquí la entrada es Zod estricto (campos extra → 400) con longitudes y tamaños máximos | `src/modules/ai-common/input-schemas.ts`, backend `ai-context.ts`   |
+| **Abuso del servicio**           | `X-Internal-Key` comparada en tiempo constante, 30 peticiones/min por IP (también sin clave válida, para frenar adivinarla), cuerpo ≤ 256 KB, sin CORS                                                                                                      | `src/plugins/`                                                      |
+| **Fuga de secretos**             | Ni la clave de Gemini ni la interna ni el prompt se registran; el texto de error de Google se reemplaza por un mensaje fijo por categoría                                                                                                                   | `src/gemini/llm-error.ts`, `src/config/logger.ts`                   |
+
+### Smoke de producción
+
+```bash
+AI_SMOKE_URL=https://<ai>.onrender.com npm run smoke:prod
+```
+
+Lee `AI_SMOKE_URL` y `AI_INTERNAL_KEY` del entorno (o del `.env`) y nunca las imprime. Comprueba
+`/health`, que `/v1` sin clave responda 401 y los tres endpoints con los fixtures de
+`scripts/fixtures/`, y muestra una tabla con latencia del modelo y tokens. `QUOTA_EXCEEDED` es WARN;
+cualquier otro error es FAIL y el comando sale con código 1. Ejemplo contra local:
+
+```
+| # | Check                                    | Result | ms   | Model latency · tokens     |
+| 1 | GET /health                              | PASS   | 48   |                            |
+| 2 | POST /v1/briefing without the key is 401 | PASS   | 8    |                            |
+| 3 | POST /v1/proposal-explanation            | PASS   | 7221 | 7202 ms · 904 in / 176 out |
+| 4 | POST /v1/rescue-plan                     | PASS   | 2009 | 1998 ms · 592 in / 246 out |
+| 5 | POST /v1/briefing                        | PASS   | 1159 | 1145 ms · 758 in / 141 out |
+```
 
 ### Smoke test real (fuera del CI)
 
@@ -108,12 +159,14 @@ endpoint (modelo, latencia, tokens y respuesta), o la categoría exacta del erro
 
 Formato: `{ "error": { "code": "STRING", "category"?: "STRING", "message": "texto" } }`.
 
-| `code`             | HTTP | Cuándo                                        |
-| ------------------ | ---- | --------------------------------------------- |
-| `VALIDATION_ERROR` | 400  | Entrada inválida (Zod)                        |
-| `UNAUTHORIZED`     | 401  | Falta `X-Internal-Key` o no coincide          |
-| `NOT_FOUND`        | 404  | Ruta inexistente                              |
-| `INTERNAL_ERROR`   | 500  | Error inesperado (sin detalles en producción) |
+| `code`              | HTTP | Cuándo                                                            |
+| ------------------- | ---- | ----------------------------------------------------------------- |
+| `VALIDATION_ERROR`  | 400  | Entrada inválida (Zod)                                            |
+| `UNAUTHORIZED`      | 401  | Falta `X-Internal-Key` o no coincide                              |
+| `NOT_FOUND`         | 404  | Ruta inexistente                                                  |
+| `PAYLOAD_TOO_LARGE` | 413  | Cuerpo de más de 256 KB                                           |
+| `TOO_MANY_REQUESTS` | 429  | Más de 30 peticiones por minuto e IP en `/v1` (con `Retry-After`) |
+| `INTERNAL_ERROR`    | 500  | Error inesperado (sin detalles en producción)                     |
 
 **Categorías de IA** (`code` y `category` llevan el mismo valor; el backend usa `category` para su
 `503 AI_UNAVAILABLE`):
@@ -126,20 +179,23 @@ Formato: `{ "error": { "code": "STRING", "category"?: "STRING", "message": "text
 | `UPSTREAM_ERROR`  | 502                                                           |
 | `INVALID_API_KEY` | 500                                                           |
 
-Nunca se envían stack traces.
+Qué hace el backend con cada una: `QUOTA_EXCEEDED` activa su enfriamiento (no llama hasta
+`Retry-After`, o 60 s); todas hacen que `AI_ASSISTED` degrade a `BALANCED` y que `/ai/*` responda
+`503 AI_UNAVAILABLE` con `details.category`. Nunca se envían stack traces.
 
 ## Variables de entorno
 
 Plantilla en [.env.example](.env.example). Nunca se commitean valores reales.
 
-| Variable                 | Obligatoria | Uso                                                      |
-| ------------------------ | ----------- | -------------------------------------------------------- |
-| `NODE_ENV`               | Sí          | `development` · `test` · `production`                    |
-| `PORT`                   | No          | Render lo inyecta; en local 4100 por defecto             |
-| `AI_INTERNAL_KEY`        | Sí          | Clave compartida con el backend (mínimo 32 caracteres)   |
-| `GEMINI_API_KEY`         | Para la IA  | Clave de Gemini (solo este servicio la conoce)           |
-| `GEMINI_MODEL`           | Para la IA  | Modelo de Gemini (p. ej. un modelo flash)                |
-| `AI_UPSTREAM_TIMEOUT_MS` | No          | Timeout total por llamada; 12000 por defecto, máx. 14000 |
+| Variable                 | Obligatoria | Uso                                                        |
+| ------------------------ | ----------- | ---------------------------------------------------------- |
+| `NODE_ENV`               | Sí          | `development` · `test` · `production`                      |
+| `PORT`                   | No          | Render lo inyecta; en local 4100 por defecto               |
+| `AI_INTERNAL_KEY`        | Sí          | Clave compartida con el backend (mínimo 32 caracteres)     |
+| `GEMINI_API_KEY`         | Para la IA  | Clave de Gemini (solo este servicio la conoce)             |
+| `GEMINI_MODEL`           | Para la IA  | Modelo de Gemini (p. ej. un modelo flash)                  |
+| `AI_UPSTREAM_TIMEOUT_MS` | No          | Timeout total por llamada; 12000 por defecto, máx. 14000   |
+| `AI_SMOKE_URL`           | Smoke       | URL desplegada para `npm run smoke:prod` (no va en Render) |
 
 Sin `GEMINI_API_KEY` el servicio arranca igual: `/health` muestra `geminiConfigured: false` y los
 endpoints de IA responden `500 INVALID_API_KEY` ("not configured"); sin `GEMINI_MODEL`,
@@ -171,6 +227,7 @@ npm run smoke:gemini   # con GEMINI_API_KEY y GEMINI_MODEL en .env
 | `npm run format`       | Formatea con Prettier                |
 | `npm run format:check` | Verifica el formato (lo usa CI)      |
 | `npm run smoke:gemini` | Llamada real a Gemini (no en CI)     |
+| `npm run smoke:prod`   | Smoke del servicio desplegado        |
 
 ## Puertos
 
@@ -190,7 +247,8 @@ npm run smoke:gemini   # con GEMINI_API_KEY y GEMINI_MODEL en .env
 | `PORT`        | No se define: Render lo inyecta         |
 
 `AI_INTERNAL_KEY` debe ser la misma en este servicio y en el backend. Las claves se configuran en
-el panel de Render.
+el panel de Render. Rollback, rotación de claves y cuotas de AI Studio:
+[docs/deployment.md](docs/deployment.md).
 
 ## CI
 
