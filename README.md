@@ -95,11 +95,11 @@ priority, dueDate, customerType? }], kpis }`.
 
 ### Versiones de los prompts
 
-| Prompt                   | Versión actual           | Cambio de la versión 2                                                    |
-| ------------------------ | ------------------------ | ------------------------------------------------------------------------- |
-| Explicación de propuesta | `proposal-explanation@2` | No agregar unidades que no vengan en DATA; tildes y ortografía en español |
-| Plan de rescate          | `rescue-plan@2`          | Ídem                                                                      |
-| Briefing del día         | `briefing@2`             | Ídem                                                                      |
+| Prompt                   | Versión actual           | Cambio de la versión 2                                                                                                                          |
+| ------------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Explicación de propuesta | `proposal-explanation@3` | v2: sin unidades inventadas, tildes. v3: copiar conteos de `DATA.totals`, se permite redondear puntajes; modo compacto tras un corte por tokens |
+| Plan de rescate          | `rescue-plan@2`          | v2: sin unidades inventadas, tildes                                                                                                             |
+| Briefing del día         | `briefing@2`             | Ídem                                                                                                                                            |
 
 La versión cambia cada vez que cambia el texto y se registra en cada línea de log, así una respuesta
 se puede rastrear hasta el prompt que la produjo.
@@ -115,6 +115,15 @@ se puede rastrear hasta el prompt que la produjo.
 | **Minimización de datos**        | El backend arma el contexto filtrado por rol (el OPERATOR no envía datos de gestión) y solo manda lo necesario: sin emails, teléfonos, direcciones ni ids de usuario. Aquí la entrada es Zod estricto (campos extra → 400) con longitudes y tamaños máximos | `src/modules/ai-common/input-schemas.ts`, backend `ai-context.ts`   |
 | **Abuso del servicio**           | `X-Internal-Key` comparada en tiempo constante, 30 peticiones/min por IP (también sin clave válida, para frenar adivinarla), cuerpo ≤ 256 KB, sin CORS                                                                                                      | `src/plugins/`                                                      |
 | **Fuga de secretos**             | Ni la clave de Gemini ni la interna ni el prompt se registran; el texto de error de Google se reemplaza por un mensaje fijo por categoría                                                                                                                   | `src/gemini/llm-error.ts`, `src/config/logger.ts`                   |
+
+### Diagnóstico sin contenido
+
+Cada llamada registra, sin el prompt ni la respuesta: por intento `finishReason`, tokens de salida,
+si el JSON parseó y si cumplió el esquema (o el status HTTP de Gemini si falló), y cuántas frases
+se descartaron por regla (`number`: cifra no encontrada, `format`, `duplicate`, `limit`, `code`).
+Un `502 UPSTREAM_ERROR` solo sale cuando no queda ninguna frase válida, y el log dice por qué.
+Si la respuesta llega cortada (`MAX_TOKENS`) no se repite igual: se envían las 30 líneas de mayor
+puntaje con `totals` y se pide un resumen más corto (`compacted: true` en el log).
 
 ### Smoke de producción
 
