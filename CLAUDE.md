@@ -22,6 +22,14 @@ Conventions for anyone (human or AI assistant) working in this repository.
   receives already filtered data, validates it with Zod and returns structured JSON (validated with
   Zod as well).
 
+## Hardening rules
+
+- `/v1` is rate limited (30 per minute and IP) before the key check, and bodies are capped at
+  256 KB (`BODY_LIMIT_BYTES`). Do not move the limiter after `internal-auth`.
+- `smoke:prod` never prints `AI_INTERNAL_KEY`, prompts or answers; `QUOTA_EXCEEDED` is a warning,
+  every other failure exits 1.
+- Bump a prompt's version whenever its wording changes, and update the table in README.
+
 ## AI rules
 
 - The model only explains data the backend computed: it never decides quantities and every figure
