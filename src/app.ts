@@ -32,9 +32,12 @@ import {
 } from './modules/rescue-plan/index.js';
 import errorHandler from './plugins/error-handler.js';
 import internalAuth from './plugins/internal-auth.js';
+import rateLimit from './plugins/rate-limit.js';
 import security from './plugins/security.js';
 
 export const PROTECTED_PREFIX = '/v1';
+/** The largest input (a proposal explanation) is a few KB; 256 KB leaves room and no more. */
+export const BODY_LIMIT_BYTES = 262_144;
 
 export interface AppDeps {
   env: Pick<
@@ -45,6 +48,8 @@ export interface AppDeps {
   llm?: LlmClient;
   appInfo?: AppInfo;
   logger?: NonNullable<FastifyServerOptions['logger']>;
+  /** Tests inject a clock or a smaller limit; production uses 30 per minute and IP. */
+  rateLimit?: { max?: number; windowMs?: number; now?: () => number };
 }
 
 /** Used when GEMINI_API_KEY is missing: never reached, the client refuses first. */
@@ -71,11 +76,14 @@ export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
     logger: deps.logger ?? buildLoggerOptions(env.NODE_ENV),
     // Render terminates TLS in a proxy; trust it for request.ip and protocol.
     trustProxy: true,
+    bodyLimit: BODY_LIMIT_BYTES,
   });
 
   await app.register(sensible);
   await app.register(errorHandler, { isProduction: env.NODE_ENV === 'production' });
   await app.register(security);
+  // Before the key check: also limits attempts to guess AI_INTERNAL_KEY.
+  await app.register(rateLimit, { prefix: PROTECTED_PREFIX, ...deps.rateLimit });
   await app.register(internalAuth, {
     internalKey: env.AI_INTERNAL_KEY,
     protectedPrefix: PROTECTED_PREFIX,
