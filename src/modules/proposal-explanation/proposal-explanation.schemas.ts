@@ -11,10 +11,28 @@ import {
   shortText,
 } from '../ai-common/index.js';
 
+const count = z.number().int().min(0).max(100_000);
+
+/**
+ * Counts of the whole proposal, computed by the backend. The model may only
+ * write counts it can copy from here ("35 pedidos"), never count by itself.
+ */
+export const proposalTotalsSchema = z.object({
+  orders: count,
+  lines: count,
+  full: count,
+  partial: count,
+  unserved: count,
+});
+
+export type ProposalTotals = z.infer<typeof proposalTotalsSchema>;
+
 export const proposalExplanationInputSchema = z.object({
   locale: localeSchema,
   role: roleSchema,
   strategy: z.string().trim().max(40).optional(),
+  /** Optional: older backends do not send it. */
+  totals: proposalTotalsSchema.optional(),
   lines: listOf(
     z.object({
       orderCode: shortText,

@@ -33,5 +33,6 @@ export const SHARED_RULES: Readonly<Record<Locale, string>> = Object.freeze({
 export interface VersionedPrompt {
   /** Changes whenever the wording changes, so answers can be traced to a prompt. */
   readonly version: string;
-  system(locale: Locale): string;
+  /** `compact`: DATA was trimmed after an answer cut by the token limit. */
+  system(locale: Locale, options?: { compact?: boolean }): string;
 }
