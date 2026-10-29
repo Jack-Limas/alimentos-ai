@@ -49,9 +49,9 @@ export function createBriefingService(llm: LlmClient): BriefingService {
           userData,
           ...(signal ? { signal } : {}),
         },
-        sanitize: (raw) => {
-          const summary = groundedText(raw.summary, allowed, 400);
-          const actions = groundedList(raw.topActions, allowed, MAX_TOP_ACTIONS);
+        sanitize: (raw, stats) => {
+          const summary = groundedText(raw.summary, allowed, 400, stats);
+          const actions = groundedList(raw.topActions, allowed, MAX_TOP_ACTIONS, stats);
           if (summary.text === null && actions.items.length === 0) {
             throw new LlmError('UPSTREAM_ERROR');
           }

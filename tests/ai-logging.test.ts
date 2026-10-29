@@ -71,4 +71,31 @@ describe('AI call logging', () => {
       errorCategory: 'TIMEOUT',
     });
   });
+
+  it('logs the attempt trace and the drops per rule, without the text', async () => {
+    const lines = await call(
+      createFakeLlm(() => ({
+        summary: 'Hay 999 pedidos atrasados.',
+        topActions: ['Revisa 777 lotes.', 'Revisa el stock bajo.', 'Revisa el stock bajo.'],
+      })),
+    );
+    const entry = lines.find((line) => line.msg === 'AI call succeeded');
+
+    expect(entry?.ai).toMatchObject({
+      trace: [{ finishReason: 'STOP', json: 'ok', schema: 'ok' }],
+      discards: { number: 2, duplicate: 1, format: 0, limit: 0, code: 0 },
+    });
+    expect(JSON.stringify(lines)).not.toContain('999 pedidos');
+  });
+
+  it('logs why nothing was usable when every sentence was dropped', async () => {
+    const lines = await call(
+      createFakeLlm(() => ({ summary: 'Hay 999 pedidos.', topActions: [] })),
+    );
+    expect(lines.find((line) => line.msg === 'AI call failed')?.ai).toMatchObject({
+      errorCategory: 'UPSTREAM_ERROR',
+      discards: { number: 1 },
+      trace: [{ json: 'ok', schema: 'ok' }],
+    });
+  });
 });

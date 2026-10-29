@@ -82,10 +82,11 @@ export function createProposalExplanationService(llm: LlmClient): ProposalExplan
           userData,
           ...(signal ? { signal } : {}),
         },
-        sanitize: (raw) => {
-          const summary = groundedText(raw.summary, allowed, 400);
-          const highlights = groundedList(raw.highlights, allowed, MAX_HIGHLIGHTS);
+        sanitize: (raw, stats) => {
+          const summary = groundedText(raw.summary, allowed, 400, stats);
+          const highlights = groundedList(raw.highlights, allowed, MAX_HIGHLIGHTS, stats);
           const order = sanitizeTieBreakOrder(raw.tieBreakOrder, tied);
+          stats.code += order.discarded;
           const text = summary.text ?? highlights.items[0];
           // Nothing grounded survived: the backend falls back to the rules result.
           if (text === undefined) throw new LlmError('UPSTREAM_ERROR');

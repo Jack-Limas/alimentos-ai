@@ -1,5 +1,6 @@
 import type { FastifyBaseLogger } from 'fastify';
 import { LlmError, type GenerateJsonRequest, type LlmClient } from '../../gemini/index.js';
+import { emptyDiscardStats, type DiscardStats } from '../../shared/text/discard-stats.js';
 
 /** Sent with every AI answer, so the backend can show and trace it. */
 export interface AiMeta {
@@ -19,8 +20,8 @@ export interface RunLlmOptions<Raw, Out> {
   endpoint: string;
   promptVersion: string;
   request: GenerateJsonRequest<Raw>;
-  /** Post-validation: keeps only what is grounded in the input. */
-  sanitize: (raw: Raw) => { result: Out; discarded: number };
+  /** Post-validation: keeps only what is grounded in the input; counts drops in `stats`. */
+  sanitize: (raw: Raw, stats: DiscardStats) => { result: Out; discarded: number };
 }
 
 /**
@@ -35,9 +36,20 @@ export async function runLlm<Raw, Out>({
   request,
   sanitize,
 }: RunLlmOptions<Raw, Out>): Promise<Out & { meta: AiMeta }> {
+  const discards = emptyDiscardStats();
   try {
     const answer = await llm.generateJson(request);
-    const { result, discarded } = sanitize(answer.data);
+    let sanitized: { result: Out; discarded: number };
+    try {
+      sanitized = sanitize(answer.data, discards);
+    } catch (error) {
+      if (error instanceof LlmError) {
+        error.trace = answer.trace;
+        error.discards = discards;
+      }
+      throw error;
+    }
+    const { result, discarded } = sanitized;
     const meta: AiMeta = {
       model: answer.model,
       promptVersion,
@@ -47,12 +59,22 @@ export async function runLlm<Raw, Out>({
       attempts: answer.attempts,
       discardedItems: discarded,
     };
-    log.info({ ai: { endpoint, ...meta } }, 'AI call succeeded');
+    // Diagnostics without content: finishReason, tokens, JSON/schema per attempt, drops per rule.
+    log.info({ ai: { endpoint, ...meta, trace: answer.trace, discards } }, 'AI call succeeded');
     return { ...result, meta };
   } catch (error) {
     if (error instanceof LlmError) {
       log.warn(
-        { ai: { endpoint, model: llm.model, promptVersion, errorCategory: error.category } },
+        {
+          ai: {
+            endpoint,
+            model: llm.model,
+            promptVersion,
+            errorCategory: error.category,
+            ...(error.trace ? { trace: error.trace } : {}),
+            ...(error.discards ? { discards: error.discards } : {}),
+          },
+        },
         'AI call failed',
       );
       throw error.toAppError();

@@ -1,4 +1,5 @@
 import type { FastifyBaseLogger } from 'fastify';
+import type { DiscardStats } from '../../shared/text/discard-stats.js';
 import type { LlmClient } from '../../gemini/index.js';
 import { RESCUE_PLAN_PROMPT } from '../../prompts/index.js';
 import { collectNumbers } from '../../shared/text/number-guard.js';
@@ -25,6 +26,7 @@ export function sanitizeRescueActions(
   raw: RescuePlanRaw['actions'],
   input: Pick<RescuePlanInput, 'products' | 'customerTypes'>,
   allowed: ReadonlySet<string>,
+  stats?: DiscardStats,
 ): { actions: RescueAction[]; discarded: number } {
   const names = new Map(input.products.map((product) => [normalize(product.name), product.name]));
   const canDonate = input.customerTypes.includes('FOOD_BANK');
@@ -37,19 +39,24 @@ export function sanitizeRescueActions(
     const action = entry.action.trim().toUpperCase();
     const known = (RESCUE_ACTIONS as readonly string[]).includes(action);
     const rationale = groundedText(entry.rationale, allowed, 240);
-    if (
-      product === undefined ||
-      !known ||
-      (action === 'DONATE' && !canDonate) ||
-      seen.has(product) ||
-      rationale.text === null ||
-      rationale.removed > 0
-    ) {
+    const reason =
+      product === undefined || !known || (action === 'DONATE' && !canDonate)
+        ? 'code'
+        : seen.has(product)
+          ? 'duplicate'
+          : rationale.removed > 0
+            ? 'number'
+            : rationale.text === null
+              ? 'format'
+              : null;
+    // product === undefined always comes with reason 'code'; checked again for the type.
+    if (reason !== null || product === undefined) {
       discarded += 1;
+      if (stats && reason !== null) stats[reason] += 1;
       continue;
     }
     seen.add(product);
-    actions.push({ product, action: action as RescueActionType, rationale: rationale.text });
+    actions.push({ product, action: action as RescueActionType, rationale: rationale.text ?? '' });
   }
   return { actions, discarded };
 }
@@ -80,8 +87,8 @@ export function createRescuePlanService(llm: LlmClient): RescuePlanService {
           userData,
           ...(signal ? { signal } : {}),
         },
-        sanitize: (raw) => {
-          const { actions, discarded } = sanitizeRescueActions(raw.actions, input, allowed);
+        sanitize: (raw, stats) => {
+          const { actions, discarded } = sanitizeRescueActions(raw.actions, input, allowed, stats);
           return { result: { actions }, discarded };
         },
       });
